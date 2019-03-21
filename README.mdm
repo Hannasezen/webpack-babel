@@ -1,0 +1,107 @@
+1. создаем проект
+npm init
+
+2. Устанавливаем зависимости
+npm i
+
+3. Устанавливаем сборщик
+npm i --save-dev webpack webpack-cli
+
+4. Прописываем комманду для терминала
+package.json ->
+"scripts": {
+    "build": "webpack --mode production"
+  }
+
+5. Создаем файл - точку входа
+src/index.js
+
+6. Подключаем итоговый файл к html
+index.html ->
+<script src="./dist/main.js"></script>
+
+7.Устанавлияваем dev-server
+npm i --save-dev webpack-dev-server
+
+8. Прописываем комманду для терминала
+package.json ->
+"scripts": {
+    "dev": "webpack --mode development --open"
+  }
+
+10. Установить path
+npm i --save-dev path
+
+9. Создаем файл webpack.config.js
+//для переведения относительных путей в абсолютные
+let path = require('path');
+let conf = {
+  //точка входа
+  entry: './src/index.js',
+  //итоговый файл и его директория
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    filename: 'main.js',
+    publicPath: 'dist/'
+  },
+  //ошибка выводится на все окно на черном фоне
+  devServer: {
+    overlay: true
+  }
+};
+
+module.exports conf;
+
+10. Устанавливаем babel
+npm i --save-dev babel-core babel-loader@7 babel-preset-env babel-preset-stage-3
+
+11.Создаем файл .babelrc
+{
+  presets: [
+    "env",
+    "stage-3"
+  ]
+}
+
+11. webpack.config.js ->
+module: {
+    //правила, по которым webpack перестраивает файл
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader'
+      }
+    ]
+  }
+
+12. source-map для отладки webpack.config.js -> 
+
+module.exports = (env, options) => {
+  let production = options.mode === 'production';
+  conf.devtool = production
+                  ? false
+                  : 'eval-sourcemap';
+  return conf;
+};
+
+13. Создаем папку css/style.css
+
+14. index.js -> 
+import './css/style.css'
+
+15. Устанавливаем loader
+npm i --save-dev style-loader css-loader@1
+
+16. webpack.config.js ->
+module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader', 
+          'css-loader'
+        ],
+      },
+    ]
+  }
+
